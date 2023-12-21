@@ -317,6 +317,11 @@ secret:
   # -- database for the PostgreSQL connection string
   database: ""
 
+# TODO: Not able to get PostgreSQL config working on NIRD yet. Now uses non-persisting SQLite database
+#       Persistence is probably only needed for database, no need to mount S3 buckets here, and probably
+#       also not in agents (we can probably use Boso3 instead, which would be more infrastructure-independent,
+#       allowing deployment of agents anywhere)
+
 # PostgreSQL subchart - default overrides
 postgresql:
   # -- enable use of bitnami/postgresql subchart

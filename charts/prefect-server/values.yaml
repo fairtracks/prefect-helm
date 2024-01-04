@@ -185,7 +185,7 @@ serviceAccount:
   # -- specifies whether a ServiceAccount should be created
   create: true
   # -- the name of the ServiceAccount to use. if not set and create is true, a name is generated using the common.names.fullname template
-  name: prefect
+  name: ""
   # -- additional service account annotations (evaluated as a template)
   annotations: {}
 

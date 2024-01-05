@@ -54,7 +54,7 @@ agent:
 
   ## connection settings
   # -- one of 'cloud' or 'server'
-  apiConfig: "cloud"
+  apiConfig: "server"
 
   cloudApiConfig:
     # -- prefect account ID
@@ -73,7 +73,7 @@ agent:
 
   serverApiConfig:
     # -- prefect API url (PREFECT_API_URL); should be in-cluster URL if the agent is deployed in the same cluster as the API
-    apiUrl: http://127.0.0.1:4200/api
+    apiUrl: "https://prefect.fairtracks.sigma2.no/api"
 
   # -- number of agent replicas to deploy
   replicaCount: 1
@@ -81,7 +81,7 @@ agent:
   resources:
     # -- the requested resources for the agent container
     requests:
-      memory: 256Mi
+      memory: 512Mi
       cpu: 100m
     # -- the requested limits for the agent container
     limits:

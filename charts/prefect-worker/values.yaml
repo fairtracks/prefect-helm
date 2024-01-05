@@ -38,7 +38,7 @@ worker:
   ## general configuration of the worker
   config:
     # -- the work pool that your started worker will poll.
-    workPool: ""
+    workPool: "kubernetes-agent"
     # -- one or more work queue names for the worker to pull from. if not provided, the worker will pull from all work queues in the work pool
     workQueues: []
     # -- how often the worker will query for runs
@@ -65,7 +65,7 @@ worker:
 
   ## connection settings
   # -- one of 'cloud', 'selfHosted', or 'server'
-  apiConfig: "cloud"
+  apiConfig: "server"
 
   cloudApiConfig:
     # -- prefect account ID
@@ -102,9 +102,12 @@ worker:
     # If the prefect server is located external to this cluster, set a fully qualified domain name as the apiUrl
     # If the prefect server pod is deployed to this cluster, use the cluster DNS endpoint: http://<prefect-server-service-name>.<namespace>.svc.cluster.local:<prefect-server-port>/api
     # -- prefect API url (PREFECT_API_URL)
-    apiUrl: ""
+    # TODO: The apiUrl according to the previous comment do not resolve in a successful worker config. Need to check out the reason.
+    #apiUrl: "http://prefect-server.fairtracks-ns10022k.svc.cluster.local:4200/api"
+
+    apiUrl: "https://prefect.fairtracks.sigma2.no/api"
     # -- prefect UI url
-    uiUrl: http://localhost:4200
+    uiUrl: "https://prefect.fairtracks.sigma2.no"
 
   # -- number of worker replicas to deploy
   replicaCount: 1
@@ -112,7 +115,7 @@ worker:
   resources:
     # -- the requested resources for the worker container
     requests:
-      memory: 256Mi
+      memory: 512Mi
       cpu: 100m
     # -- the requested limits for the worker container
     limits:

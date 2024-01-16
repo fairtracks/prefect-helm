@@ -4,7 +4,7 @@ nameOverride: ""
 # -- fully override common.names.fullname
 fullnameOverride: "prefect-worker"
 # -- fully override common.names.namespace
-namespaceOverride: ""
+namespaceOverride: "fairtracks-ns10022k"
 # -- labels to add to all deployed objects
 commonLabels: {}
 # -- annotations to add to all deployed objects

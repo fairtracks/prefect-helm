@@ -4,7 +4,7 @@ nameOverride: ""
 # -- fully override common.names.fullname
 fullnameOverride: "prefect-server"
 # -- fully override common.names.namespace
-namespaceOverride: ""
+namespaceOverride: "fairtracks-ns10022k"
 # -- labels to add to all deployed objects
 commonLabels: {}
 # -- annotations to add to all deployed objects
@@ -18,7 +18,7 @@ server:
     ## prefect tag is pinned to the latest available image tag at packaging time.  Update the value here to
     ## override pinned tag
     # -- prefect image tag (immutable tags are recommended)
-    prefectTag: 2-latest
+    prefectTag: 2.13-python3.10-kubernetes
     # -- server image pull policy
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -57,10 +57,19 @@ server:
 
   # see here for a full list of possible environment variables - https://docs.prefect.io/latest/api-ref/prefect/settings/
   # -- array with environment variables to add to server nodes
-  env: []
-  ## env:
-  ##   - name: PREFECT_API_ENABLE_HTTP2
-  ##     value: false
+  env:
+    - name: PREFECT_SERVER_ANALYTICS_ENABLED
+      value: "false"
+#    - name: PREFECT_API_KEY
+#      valueFrom:
+#        secretKeyRef:
+#          name: prefect-config
+#          key: api_key
+#    - name: PREFECT_API_DATABASE_CONNECTION_URL
+#      valueFrom:
+#        secretKeyRef:
+#          name: prefect-config
+#          key: api_db
 
   # Autoscaling configuration
   # requests MUST be specified if using an HPA, otherwise the HPA will not know when to trigger a scale event
@@ -83,11 +92,11 @@ server:
   resources:
     # -- the requested resources for the server container
     requests:
-      cpu: "2"
+      cpu: "1"
       memory: 2G
     # -- the requested limits for the server container
     limits:
-      cpu: "4"
+      cpu: "1"
       memory: 2G
 
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
@@ -121,16 +130,16 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   podSecurityContext:
     # -- set server pod's security context runAsUser
-    runAsUser: 1001
+    runAsUser: 1001 #240795
     # -- set server pod's security context runAsNonRoot
     runAsNonRoot: true
     # -- set server pod's security context fsGroup
-    fsGroup: 1001
+    fsGroup: 1001 #205709
 
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   containerSecurityContext:
     # -- set server containers' security context runAsUser
-    runAsUser: 1001
+    runAsUser: 1001 # 240795
     # -- set server containers' security context runAsNonRoot
     runAsNonRoot: true
     # -- set server containers' security context readOnlyRootFilesystem
@@ -268,6 +277,19 @@ ingress:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   # -- additional rules to be covered with this ingress record
   extraRules: []
+#    - host: prefect.fairtracks.sigma2.no
+#      annotations:
+#        nginx.ingress.kubernetes.io/auth-type: basic
+#        nginx.ingress.kubernetes.io/auth-secret: prefect-login-auth
+#      http:
+#        paths:
+#          - path: /api
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: prefect-api
+#                port:
+#                  number: 4200
   ## extraRules:
   ## - host: example.local
   ##     http:

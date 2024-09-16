@@ -2,7 +2,7 @@
 # -- partially overrides common.names.name
 nameOverride: ""
 # -- fully override common.names.fullname
-fullnameOverride: "prefect-worker-new"
+fullnameOverride: "prefect-worker"
 # -- fully override common.names.namespace
 namespaceOverride: "fairtracks-ns10022k"
 # -- labels to add to all deployed objects
@@ -21,7 +21,7 @@ worker:
     ## prefect tag is pinned to the latest available image tag at packaging time.  Update the value here to
     ## override pinned tag
     # -- prefect image tag (immutable tags are recommended)
-    prefectTag: 2.13-python3.10-kubernetes
+    prefectTag: 2.13.8-python3.10-kubernetes
     # -- worker image pull policy
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -153,8 +153,8 @@ worker:
             "image": {
               "title": "Image",
               "description": "The image reference of a container image to use for created jobs. If not set, the latest Prefect image will be used.",
-              "default": "docker.io/fairtracks/omnipy-examples:v0.6.8",
-              "type": "string"
+              "default": "docker.io/prefecthq/prefect:2.13.8-python3.10-kubernetes",
+             "type": "string"
             },
             "service_account_name": {
               "title": "Service Account Name",
@@ -288,9 +288,9 @@ worker:
     # TODO: The apiUrl according to the previous comment do not resolve in a successful worker config. Need to check out the reason.
     #apiUrl: "http://prefect-server.fairtracks-ns10022k.svc.cluster.local:4200/api"
 
-    apiUrl: "https://prefect-new.fairtracks.sigma2.no/api"
+    apiUrl: "https://prefect.fairtracks.sigma2.no/api"
     # -- prefect UI url
-    uiUrl: "https://prefect-new.fairtracks.sigma2.no"
+    uiUrl: "https://prefect.fairtracks.sigma2.no"
 
   # -- number of worker replicas to deploy
   replicaCount: 2

@@ -423,7 +423,8 @@ worker:
 
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   # -- node labels for worker pods assignment
-  nodeSelector: {}
+  nodeSelector:
+    role: worker
 
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   # -- tolerations for worker pods assignment

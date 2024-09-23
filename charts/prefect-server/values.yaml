@@ -156,7 +156,8 @@ server:
 
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   # -- node labels for server pods assignment
-  nodeSelector: {}
+  nodeSelector:
+    role: server
 
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   # -- tolerations for server pods assignment
@@ -335,6 +336,9 @@ postgresql:
     initdb:
       # -- specify the PostgreSQL username to execute the initdb scripts
       user: postgres
+
+    nodeSelector:
+      role: server
 
     ## persistence enables a PVC that stores the database between deployments. If making changes to the database deployment, this
     ## PVC will need to be deleted for database changes to take effect. This is especially notable when the authentication password

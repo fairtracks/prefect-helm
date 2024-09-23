@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Node
+metadata:
+  labels:
+    name: workerb
+    role: worker
+  name: workerb

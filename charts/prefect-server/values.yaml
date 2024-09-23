@@ -85,12 +85,12 @@ server:
   resources:
     # -- the requested resources for the server container
     requests:
-      cpu: "1"
-      memory: 2G
+      cpu: 500m
+      memory: 512Mi
     # -- the requested limits for the server container
     limits:
       cpu: "1"
-      memory: 2G
+      memory: 1Gi
 
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:

@@ -361,12 +361,12 @@ worker:
   resources:
     # -- the requested resources for the worker container
     requests:
-      cpu: "1"
-      memory: 1G
+      memory: 256Mi
+      cpu: 100m
     # -- the requested limits for the worker container
     limits:
-      cpu: "1"
-      memory: 2G
+      memory: 1Gi
+      cpu: 1000m
 
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:

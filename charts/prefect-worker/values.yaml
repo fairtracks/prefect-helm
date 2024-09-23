@@ -59,7 +59,7 @@ worker:
     ## prefect tag is pinned to the latest available image tag at packaging time.  Update the value here to
     ## override pinned tag
     # -- prefect image tag (immutable tags are recommended)
-    prefectTag: v0.7.6
+    prefectTag: v0.7.7
     # -- worker image pull policy
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -212,7 +212,7 @@ worker:
                 "title": "Image",
                 "description": "The image reference of a container image to use for created jobs. If not set, the latest Prefect image will be used.",
                 "example": "docker.io/prefecthq/prefect:2-latest",
-                "default": "fairtracks/omnipy-examples:v0.7.6",
+                "default": "fairtracks/omnipy-examples:v0.7.7",
                 "type": "string"
               },
               "service_account_name": {

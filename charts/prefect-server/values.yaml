@@ -41,7 +41,7 @@ server:
   loggingLevel: WARNING
 
   # -- sets PREFECT_API_URL
-  prefectApiUrl: https://prefect-server:4200/api
+  prefectApiUrl: http://localhost:4200/api
 
   # -- sets PREFECT_SERVER_API_HOST
   prefectApiHost: 0.0.0.0

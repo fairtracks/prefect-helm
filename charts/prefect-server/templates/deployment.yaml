@@ -4,7 +4,7 @@ metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: server
+    app.kubernetes.io/component: prefect-server
     prefect-version: {{ .Chart.AppVersion }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -16,14 +16,14 @@ spec:
   replicas: {{ .Values.server.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: server
+      app.kubernetes.io/component: prefect-server
   template:
     metadata:
       {{- if .Values.server.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.server.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: server
+        app.kubernetes.io/component: prefect-server
         prefect-version: {{ .Chart.AppVersion }}
         {{- if .Values.server.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.server.podLabels "context" $) | nindent 8 }}

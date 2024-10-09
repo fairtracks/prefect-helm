@@ -143,6 +143,9 @@ worker:
                 "backoffLimit": 0,
                 "ttlSecondsAfterFinished": "{{ finished_job_ttl }}",
                 "template": {
+                  "metadata": {
+                    "labels": "{{ labels }}"
+                  },
                   "spec": {
                     "parallelism": 1,
                     "completions": 1,
@@ -195,6 +198,9 @@ worker:
                 "type": "object",
                 "additionalProperties": {
                   "type": "string"
+                },
+                "default": {
+                  "app.kubernetes.io/component": "prefect-job"
                 }
               },
               "command": {

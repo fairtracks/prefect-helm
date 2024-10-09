@@ -4,7 +4,8 @@ nameOverride: ""
 # -- fully override common.names.fullname
 fullnameOverride: "prefect-server"
 # -- fully override common.names.namespace
-namespaceOverride: "fairtracks-ns10022k"
+namespaceOverride: ""
+#namespaceOverride: "fairtracks-ns10022k"
 # -- labels to add to all deployed objects
 commonLabels: {}
 # -- annotations to add to all deployed objects
@@ -18,7 +19,7 @@ server:
     ## prefect tag is pinned to the latest available image tag at packaging time.  Update the value here to
     ## override pinned tag
     # -- prefect image tag (immutable tags are recommended)
-    prefectTag: 2.13.8-python3.10-kubernetes
+    prefectTag: 2.20.8-python3.12-kubernetes
     # -- server image pull policy
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -41,7 +42,8 @@ server:
   loggingLevel: WARNING
 
   # -- sets PREFECT_API_URL
-  prefectApiUrl: http://prefect.fairtracks.sigma2.no/api
+  prefectApiUrl: http://localhost:4200/api
+#  prefectApiUrl: http://prefect.fairtracks.sigma2.no/api
 
   # -- sets PREFECT_SERVER_API_HOST
   prefectApiHost: 0.0.0.0
@@ -94,12 +96,12 @@ server:
   resources:
     # -- the requested resources for the server container
     requests:
-      cpu: "1"
-      memory: 2G
+      cpu: 500m
+      memory: 512Mi
     # -- the requested limits for the server container
     limits:
       cpu: "1"
-      memory: 2G
+      memory: 1Gi
 
   # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:
@@ -205,7 +207,7 @@ service:
   # -- target port of the server pod; also sets PREFECT_SERVER_API_PORT
   targetPort: 4200
   # -- service port if defining service as type nodeport
-#  nodePort: ""
+  nodePort: ""
 
   extraPorts: []
     # # example extra ports
@@ -247,15 +249,15 @@ ingress:
     # -- default path for the ingress record
     path: /
     # -- ingress path type
-#    pathType: ImplementationSpecific
-    pathType: Prefix
+    pathType: ImplementationSpecific
+#    pathType: Prefix
 
   ## Use this parameter to set the required annotations for cert-manager, see
   ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
   # -- additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
 #  annotations: {}
   annotations:
-    appstore.uninett.no/contact_email: sveinugu@ifi.uio.no
+    appstore.uninett.no/contact_email: sveinugu@uio.no
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
@@ -322,7 +324,7 @@ ingress:
 
 # Secret configuration
 secret:
-  # -- whether to create a Secret containing the PostgreSQL connection string
+  # -- whether to create a Secret containixng the PostgreSQL connection string
   create: true
   # -- name for the Secret containing the PostgreSQL connection string
   # To provide an existing Secret, provide a name and set `create=false`
@@ -347,7 +349,9 @@ secret:
 # PostgreSQL subchart - default overrides
 postgresql:
   # -- enable use of bitnami/postgresql subchart
-  enabled: false
+  enabled: true
+  # requests MUST be specified if using an HPA, otherwise the HPA will not know when to trigger a scale event
+
   auth:
     # -- determines whether an admin user is created within postgres
     enablePostgresUser: false
@@ -368,13 +372,45 @@ postgresql:
       # -- specify the PostgreSQL username to execute the initdb scripts
       user: postgres
 
+    resources:
+      # -- the requested resources for the server container
+      requests:
+        cpu: 500m
+        memory: 256Mi
+      # -- the requested limits for the server container
+      limits:
+        cpu: "1"
+        memory: 512Mi
+
     ## persistence enables a PVC that stores the database between deployments. If making changes to the database deployment, this
     ## PVC will need to be deleted for database changes to take effect. This is especially notable when the authentication password
     ## changes on redeploys. This is disabled by default because we do not recommend using the subchart deployment for production deployments.
     persistence:
       # -- enable PostgreSQL Primary data persistence using PVC
-      enabled: false
+      enabled: true
+      existingClaim: "8fbdd1bd-31a5-4ffd-a5b0-eaf10e519732"
 
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    podSecurityContext:
+      # -- set server pod's security context runAsUser
+      runAsUser: 240795
+      # -- set server pod's security context runAsNonRoot
+      runAsNonRoot: true
+      # -- set server pod's security context fsGroup
+      fsGroup: 205709
+
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    containerSecurityContext:
+      # -- set server containers' security context runAsUser
+      runAsUser: 240795
+      # -- set server containers' security context runAsNonRoot
+      runAsNonRoot: true
+      # -- set server containers' security context readOnlyRootFilesystem
+#      readOnlyRootFilesystem: true
+      # -- set server containers' security context allowPrivilegeEscalation
+      allowPrivilegeEscalation: false
+      # -- set server container's security context capabilities
+      capabilities: { }
   image:
     # -- Version tag, corresponds to tags at https://hub.docker.com/r/bitnami/postgresql/
     tag: 14.3.0

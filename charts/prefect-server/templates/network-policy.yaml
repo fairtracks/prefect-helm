@@ -11,7 +11,8 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: {{ template "common.names.fullname" . }}
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: server
   ingress:
     - from:
       - namespaceSelector:
@@ -20,3 +21,42 @@ spec:
       ports:
         - protocol: TCP
           port: 4200
+
+    - from:
+      - podSelector:
+          matchLabels:
+#            {{- include "common.labels.matchLabels" . | nindent 12 }}
+            app.kubernetes.io/component: worker
+            app.kubernetes.io/name: prefect-worker
+            app.kubernetes.io/instance: prefect-worker
+
+      ports:
+        - protocol: TCP
+          port: 4200
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ template "common.names.fullname" . }}-postgresql
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: primary
+    prefect-version: {{ .Chart.AppVersion }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/name: postgresql
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            {{- include "common.labels.matchLabels" . | nindent 12 }}
+            app.kubernetes.io/component: server
+      ports:
+        - protocol: TCP
+          port: 5432

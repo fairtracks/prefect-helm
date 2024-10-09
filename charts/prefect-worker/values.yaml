@@ -212,7 +212,7 @@ worker:
               "namespace": {
                 "title": "Namespace",
                 "description": "The Kubernetes namespace to create jobs within.",
-                "default": "default",
+                "default": "fairtracks-ns10022k",
                 "type": "string"
               },
               "image": {
